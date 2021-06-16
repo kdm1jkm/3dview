@@ -1,0 +1,24 @@
+{
+  "name": "3dview",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "start": "parcel src/index.html -d dist",
+    "build": "parcel build src/index.html -d dist",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "gh-pages": "^3.2.1",
+    "parcel-bundler": "^1.12.5",
+    "typescript": "^4.3.2"
+  },
+  "dependencies": {
+    "fabric": "^4.5.0"
+  }
+}
