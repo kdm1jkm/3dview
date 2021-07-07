@@ -1,27 +1,26 @@
-import { fabric } from "fabric";
-
 export default class Main {
-  private readonly canvas = new fabric.StaticCanvas("canvas", {
-    width: window.innerWidth,
-    height: window.innerHeight,
-  });
-  private readonly canvasElement = this.canvas.getElement();
+  private readonly canvas = document.createElement("canvas");
 
   constructor() {
     window.addEventListener("resize", (_) => {
-      this.canvas.setWidth(window.innerWidth);
-      this.canvas.setHeight(window.innerHeight);
+      document.body.appendChild(this.canvas);
+      this.resizeCanvas();
     });
 
-    this.canvasElement.addEventListener("mousedown", () => {
+    this.resizeCanvas();
+
+    this.canvas.addEventListener("mousedown", () => {
       console.log("Request PointerLock");
-      this.canvasElement.requestPointerLock();
+      this.canvas.requestPointerLock();
     });
 
-    this.canvasElement.addEventListener("mousemove", (e) => {
+    this.canvas.addEventListener("mousemove", (e) => {
       console.log(e.movementX, e.movementY);
     });
+  }
 
-    this.canvas.backgroundColor = "";
+  private resizeCanvas() {
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
   }
 }
