@@ -1,5 +1,6 @@
 export default class Main {
   private readonly canvas = document.createElement("canvas");
+  private readonly context = this.canvas.getContext("2d");
 
   constructor() {
     window.addEventListener("resize", (_) => {
