@@ -1,10 +1,10 @@
-import { Coord } from "./commons";
+import { Pos2 } from "./commons";
 import Drawable from "./drawable";
 
 export default class Polygon implements Drawable {
   constructor(
-    public points: Array<Coord>,
-    public point: Coord,
+    public points: Array<Pos2>,
+    public point: Pos2,
     public color: string
   ) {}
 
