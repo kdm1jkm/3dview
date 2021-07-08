@@ -1,3 +1,5 @@
+import Drawable from "./drawable";
+
 export default class Main {
   private readonly canvas = document.createElement("canvas");
   private readonly context = this.canvas.getContext("2d");
@@ -24,5 +26,9 @@ export default class Main {
   private resizeCanvas() {
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
+  }
+
+  draw(...objects: Drawable[]) {
+    objects.forEach((o) => o.draw(this.context));
   }
 }
