@@ -6,12 +6,15 @@ export default class Main {
 
   constructor() {
     document.body.appendChild(this.canvas);
+    this.resizeCanvas();
 
+    this.registerEventListener();
+  }
+
+  private registerEventListener() {
     window.addEventListener("resize", (_) => {
       this.resizeCanvas();
     });
-
-    this.resizeCanvas();
 
     this.canvas.addEventListener("mousedown", () => {
       console.log("Request PointerLock");
