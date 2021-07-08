@@ -3,8 +3,9 @@ export default class Main {
   private readonly context = this.canvas.getContext("2d");
 
   constructor() {
+    document.body.appendChild(this.canvas);
+
     window.addEventListener("resize", (_) => {
-      document.body.appendChild(this.canvas);
       this.resizeCanvas();
     });
 
