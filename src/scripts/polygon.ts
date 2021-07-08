@@ -1,9 +1,5 @@
+import { Coord } from "./commons";
 import Drawable from "./drawable";
-
-export interface Coord {
-  x: number;
-  y: number;
-}
 
 export default class Polygon implements Drawable {
   constructor(
