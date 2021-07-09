@@ -100,8 +100,6 @@ export default class Main {
       this.camera.tilt.v += deltaY;
       this.camera.tilt.v = Math.min(this.camera.tilt.v, Math.PI / 2);
       this.camera.tilt.v = Math.max(this.camera.tilt.v, -Math.PI / 2);
-
-      this.camera.draw(...this.objects);
     });
 
     document.addEventListener("keydown", (e) => {
