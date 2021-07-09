@@ -1,20 +1,19 @@
+import { Pos2 } from "./commons";
 import Drawable from "./drawable";
-
-export interface Coord {
-  x: number;
-  y: number;
-}
 
 export default class Polygon implements Drawable {
   constructor(
-    public points: Array<Coord>,
-    public point: Coord,
+    public points: Array<Pos2>,
+    public point: Pos2,
     public color: string
   ) {}
 
   draw(context: CanvasRenderingContext2D): void {
     context.beginPath();
-    context.moveTo(this.point.x, this.point.y);
+    context.moveTo(
+      this.point.x + this.points[0].x,
+      this.point.y + this.points[0].y
+    );
     this.points.forEach((p) => {
       context.lineTo(this.point.x + p.x, this.point.y + p.y);
     });
