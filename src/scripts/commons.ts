@@ -6,4 +6,5 @@ export interface Pos2 {
 export interface Pos3{
   x: number;
   y: number;
+  z: number;
 }
