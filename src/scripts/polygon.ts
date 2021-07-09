@@ -10,7 +10,10 @@ export default class Polygon implements Drawable {
 
   draw(context: CanvasRenderingContext2D): void {
     context.beginPath();
-    context.moveTo(this.point.x, this.point.y);
+    context.moveTo(
+      this.point.x + this.points[0].x,
+      this.point.y + this.points[0].y
+    );
     this.points.forEach((p) => {
       context.lineTo(this.point.x + p.x, this.point.y + p.y);
     });

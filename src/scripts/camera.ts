@@ -15,6 +15,8 @@ export default class Camera {
   ) {}
 
   public draw(...objects: Object3D[]) {
+    this.context.fillStyle = "white";
+    this.context.fillRect(0, 0, this.screen.width, this.screen.height);
     const k = 2 * Math.tan(this.FOV / 2);
 
     const transform = math.matrix([
@@ -24,17 +26,17 @@ export default class Camera {
       [0, 0, 0, 1],
     ]);
     const rotate = math.matrix([
+      [Math.cos(this.tilt.h), 0, Math.sin(this.tilt.h), 0],
       [
-        Math.cos(this.tilt.h) * Math.cos(this.tilt.v),
+        -Math.sin(this.tilt.h) * Math.sin(this.tilt.v),
+        Math.cos(this.tilt.v),
         Math.cos(this.tilt.h) * Math.sin(this.tilt.v),
-        Math.sin(this.tilt.h),
         0,
       ],
-      [-Math.sin(this.tilt.v), Math.cos(this.tilt.v), 0, 0],
       [
         -Math.sin(this.tilt.h) * Math.cos(this.tilt.v),
-        -Math.sin(this.tilt.h) * Math.sin(this.tilt.v),
-        Math.cos(this.tilt.h),
+        -Math.sin(this.tilt.v),
+        Math.cos(this.tilt.h) * Math.cos(this.tilt.v),
         0,
       ],
       [0, 0, 0, 1],
@@ -53,10 +55,12 @@ export default class Camera {
         return object.points
           .map((p) =>
             p.map((point): Pos2 => {
-              const result = math.multiply(
-                mat,
-                math.matrix([point.x, point.y, point.z, 1])
-              );
+              const result = math
+                .multiply(mat, math.matrix([point.x, point.y, point.z, 1]))
+                .toJSON().data;
+
+              if (result[2] < 0) return { x: NaN, y: NaN };
+
               return {
                 x: result[0] / result[2] / result[3],
                 y: result[1] / result[2] / result[3],
