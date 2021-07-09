@@ -1,3 +1,4 @@
+import Camera from "./camera";
 import Drawable from "./drawable";
 
 export default class Main {
@@ -21,6 +22,9 @@ export default class Main {
     this.canvas.addEventListener("mousemove", (e) => {
       console.log(e.movementX, e.movementY);
     });
+
+    const camera = new Camera(this.context, {width: this.canvas.width,height: this.canvas.height},{x:30,y:40,z:50},{v:Math.PI/3,h:Math.PI/6});
+    camera.draw()
   }
 
   private resizeCanvas() {
