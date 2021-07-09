@@ -65,7 +65,7 @@ export default class Main {
 
       const rotated = math
         .multiply(
-          this.camera.rotateHorizontal,
+          Camera.getRotateMatrix({ v: 0, h: this.camera.tilt.h }),
           math.matrix([velocityX, 0, velocityZ, 1])
         )
         .toJSON().data;

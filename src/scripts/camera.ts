@@ -14,32 +14,27 @@ export default class Camera {
     public FOV: number = Math.PI / 2
   ) {}
 
-  public get rotateHorizontal() {
+  public static getRotateMatrix(tilt: { v: number; h: number }) {
     return math.matrix([
-      [Math.cos(this.tilt.h), 0, -Math.sin(this.tilt.h), 0],
-      [0, 1, 0, 0],
-      [Math.sin(this.tilt.h), 0, Math.cos(this.tilt.h), 0],
+      [Math.cos(tilt.h), 0, -Math.sin(tilt.h), 0],
+      [
+        -Math.sin(tilt.h) * Math.sin(tilt.v),
+        Math.cos(tilt.v),
+        -Math.cos(tilt.h) * Math.sin(tilt.v),
+        0,
+      ],
+      [
+        Math.sin(tilt.h) * Math.cos(tilt.v),
+        Math.sin(tilt.v),
+        Math.cos(tilt.h) * Math.cos(tilt.v),
+        0,
+      ],
       [0, 0, 0, 1],
     ]);
   }
 
   public get rotate() {
-    return math.matrix([
-      [Math.cos(this.tilt.h), 0, Math.sin(this.tilt.h), 0],
-      [
-        -Math.sin(this.tilt.h) * Math.sin(this.tilt.v),
-        Math.cos(this.tilt.v),
-        Math.cos(this.tilt.h) * Math.sin(this.tilt.v),
-        0,
-      ],
-      [
-        -Math.sin(this.tilt.h) * Math.cos(this.tilt.v),
-        -Math.sin(this.tilt.v),
-        Math.cos(this.tilt.h) * Math.cos(this.tilt.v),
-        0,
-      ],
-      [0, 0, 0, 1],
-    ]);
+    return Camera.getRotateMatrix({ v: -this.tilt.v, h: -this.tilt.h });
   }
 
   public draw(...objects: Object3D[]) {
