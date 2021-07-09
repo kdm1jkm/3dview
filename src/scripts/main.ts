@@ -41,6 +41,7 @@ export default class Main {
 
   constructor() {
     document.body.appendChild(this.canvas);
+    this.canvas.innerText = "이 기기는 지원되지 않습니다.";
     this.resizeCanvas();
 
     this.registerEventListener();
