@@ -6,7 +6,7 @@
   "scripts": {
     "start": "parcel src/index.html -d dist",
     "build": "parcel build src/index.html -d dist --public-url /3dview",
-    "predeploy": "npm run build",
+    "predeploy": "rm -rf dist && npm run build",
     "deploy": "gh-pages -d dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
