@@ -90,6 +90,7 @@ export default class Main {
 
     this.canvas.addEventListener("mousemove", (e) => {
       if (document.pointerLockElement !== this.canvas) return;
+      if (this.pressingKey.has("Esc")) return;
       const deltaX = (e.movementX / 100) * -1;
       const deltaY = e.movementY / 100;
 
