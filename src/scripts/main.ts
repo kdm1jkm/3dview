@@ -1,3 +1,4 @@
+import * as math from "mathjs";
 import Camera from "./camera";
 import Drawable from "./drawable";
 import Object3D from "./object3d";
@@ -45,6 +46,36 @@ export default class Main {
     this.resizeCanvas();
 
     this.registerEventListener();
+
+    let lastTime = Date.now();
+    setInterval(() => {
+      const elapsed = Date.now() - lastTime;
+      lastTime = Date.now();
+
+      let velocityX = 0;
+      let velocityY = 0;
+      let velocityZ = 0;
+
+      if (this.pressingKey.has("w")) velocityZ += 1;
+      if (this.pressingKey.has("s")) velocityZ -= 1;
+      if (this.pressingKey.has("a")) velocityX -= 1;
+      if (this.pressingKey.has("d")) velocityX += 1;
+      if (this.pressingKey.has(" ")) velocityY += 1;
+      if (this.pressingKey.has("Shift")) velocityY -= 1;
+
+      const rotated = math
+        .multiply(
+          this.camera.revRotate,
+          math.matrix([velocityX, 0, velocityZ, 1])
+        )
+        .toJSON().data;
+
+      this.camera.position.x += rotated[0] * elapsed * 0.1;
+      this.camera.position.z += rotated[2] * elapsed * 0.1;
+      this.camera.position.y += velocityY * elapsed * 0.1;
+
+      this.camera.draw(...this.objects);
+    });
   }
 
   private registerEventListener() {

@@ -14,18 +14,27 @@ export default class Camera {
     public FOV: number = Math.PI / 2
   ) {}
 
-  public draw(...objects: Object3D[]) {
-    this.context.fillStyle = "white";
-    this.context.fillRect(0, 0, this.screen.width, this.screen.height);
-    const k = 2 * Math.tan(this.FOV / 2);
-
-    const transform = math.matrix([
-      [1, 0, 0, -this.position.x],
-      [0, 1, 0, -this.position.y],
-      [0, 0, 1, -this.position.z],
+  public get revRotate() {
+    return math.matrix([
+      [Math.cos(this.tilt.h), 0, -Math.sin(this.tilt.h), 0],
+      [
+        -Math.sin(this.tilt.h) * Math.sin(this.tilt.v),
+        Math.cos(this.tilt.v),
+        -Math.cos(this.tilt.h) * Math.sin(this.tilt.v),
+        0,
+      ],
+      [
+        Math.sin(this.tilt.h) * Math.cos(this.tilt.v),
+        Math.sin(this.tilt.v),
+        Math.cos(this.tilt.h) * Math.cos(this.tilt.v),
+        0,
+      ],
       [0, 0, 0, 1],
     ]);
-    const rotate = math.matrix([
+  }
+
+  public get rotate() {
+    return math.matrix([
       [Math.cos(this.tilt.h), 0, Math.sin(this.tilt.h), 0],
       [
         -Math.sin(this.tilt.h) * Math.sin(this.tilt.v),
@@ -41,6 +50,20 @@ export default class Camera {
       ],
       [0, 0, 0, 1],
     ]);
+  }
+
+  public draw(...objects: Object3D[]) {
+    this.context.fillStyle = "white";
+    this.context.fillRect(0, 0, this.screen.width, this.screen.height);
+    const k = 2 * Math.tan(this.FOV / 2);
+
+    const transform = math.matrix([
+      [1, 0, 0, -this.position.x],
+      [0, 1, 0, -this.position.y],
+      [0, 0, 1, -this.position.z],
+      [0, 0, 0, 1],
+    ]);
+    const rotate = this.rotate;
     const screen = math.matrix([
       [this.screen.width / k, 0, this.screen.width / 2, 0],
       [0, -this.screen.width / k, this.screen.height / 2, 0],
