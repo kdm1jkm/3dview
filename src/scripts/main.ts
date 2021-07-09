@@ -101,11 +101,6 @@ export default class Main {
       this.camera.tilt.v = Math.min(this.camera.tilt.v, Math.PI / 2);
       this.camera.tilt.v = Math.max(this.camera.tilt.v, -Math.PI / 2);
 
-      console.log(
-        (this.camera.tilt.h / Math.PI) * 180,
-        (this.camera.tilt.v / Math.PI) * 180
-      );
-
       this.camera.draw(...this.objects);
     });
 
