@@ -93,6 +93,7 @@ export default class Main {
       width: this.canvas.width,
       height: this.canvas.height,
     };
+    this.camera.draw(...this.objects);
   }
 
   draw(...objects: Drawable[]) {
