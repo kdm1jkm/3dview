@@ -14,11 +14,15 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/mathjs": "^9.4.2",
     "gh-pages": "^3.2.1",
     "parcel-bundler": "^1.12.5",
     "typescript": "^4.3.2"
   },
   "dependencies": {
     "mathjs": "^9.4.4"
-  }
+  },
+  "browserslist": [
+    "last 2 Chrome versions"
+  ]
 }
