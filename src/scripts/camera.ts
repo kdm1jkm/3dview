@@ -14,21 +14,11 @@ export default class Camera {
     public FOV: number = Math.PI / 2
   ) {}
 
-  public get revRotate() {
+  public get rotateHorizontal() {
     return math.matrix([
       [Math.cos(this.tilt.h), 0, -Math.sin(this.tilt.h), 0],
-      [
-        -Math.sin(this.tilt.h) * Math.sin(this.tilt.v),
-        Math.cos(this.tilt.v),
-        -Math.cos(this.tilt.h) * Math.sin(this.tilt.v),
-        0,
-      ],
-      [
-        Math.sin(this.tilt.h) * Math.cos(this.tilt.v),
-        Math.sin(this.tilt.v),
-        Math.cos(this.tilt.h) * Math.cos(this.tilt.v),
-        0,
-      ],
+      [0, 1, 0, 0],
+      [Math.sin(this.tilt.h), 0, Math.cos(this.tilt.h), 0],
       [0, 0, 0, 1],
     ]);
   }
