@@ -107,39 +107,55 @@ export default class Camera {
 
     const mat = math.multiply(screenMat, math.multiply(rotate, transform));
 
-    const projectedPolygons = objects
-      .map((object) => {
-        return object.points
-          .map((p) =>
-            p.map((point): Pos2 => {
-              const result = math
-                .multiply(mat, math.matrix([point.x, point.y, point.z, 1]))
-                .toJSON().data;
+    const projectedPolygons = objects.flatMap((object) => {
+      return object.points
+        .map((p) =>
+          p.map((point): Pos3 => {
+            const result = math
+              .multiply(mat, math.matrix([point.x, point.y, point.z, 1]))
+              .toJSON().data;
 
-              if (result[2] < 0) return { x: NaN, y: NaN };
+            if (result[2] < 0) return { x: NaN, y: NaN, z: NaN };
 
-              return {
-                x: result[0] / result[2] / result[3],
-                y: result[1] / result[2] / result[3],
-              };
-            })
-          )
-          .flatMap((points) => {
-            const result: Polygon[] = [];
-            for (let i = 0; i < points.length - 2; i++) {
-              result.push(
-                new Polygon(
-                  points.slice(i, i + 3),
-                  { x: 0, y: 0 },
-                  object.color
-                )
-              );
-            }
-            return result;
-          });
+            return {
+              x: result[0] / result[3] / result[2],
+              y: result[1] / result[3] / result[2],
+              z: result[2] / result[3],
+            };
+          })
+        )
+        .flatMap((points) => {
+          const result: [Pos3, Pos3, Pos3][] = [];
+          for (let i = 0; i < points.length - 2; i++) {
+            result.push([points[i], points[i + 1], points[i + 2]]);
+          }
+          return result;
+        })
+        .map((p) => {
+          return { points: p, color: object.color };
+        });
+    });
+
+    projectedPolygons
+      .sort((p1, p2) => {
+        return -(
+          p1.points[0].z +
+          p1.points[1].z +
+          p1.points[2].z -
+          p2.points[0].z -
+          p2.points[1].z -
+          p2.points[1].z
+        );
       })
-      .flatMap((e) => e);
-
-    projectedPolygons.forEach((polygon) => polygon.draw(this.context));
+      .map((p) => {
+        return new Polygon(
+          [p.points[0], p.points[1], p.points[2]],
+          { x: 0, y: 0 },
+          p.color
+        );
+      })
+      .forEach((p) => {
+        p.draw(this.context);
+      });
   }
 }
