@@ -112,8 +112,8 @@ export default class Main {
     this.canvas.addEventListener("mousemove", (e) => {
       if (document.pointerLockElement !== this.canvas) return;
       if (this.pressingKey.has("Escape")) return;
-      const deltaX = (e.movementX / 100) * -1;
-      const deltaY = e.movementY / 100;
+      const deltaX = (e.movementX / 200) * -1;
+      const deltaY = e.movementY / 200;
 
       this.camera.tilt.h += deltaX;
       if (this.camera.tilt.h > 2 * Math.PI) this.camera.tilt.h -= Math.PI * 2;
