@@ -74,6 +74,8 @@ export default class Main {
       this.camera.position.z += rotated[2] * elapsed * 0.1;
       this.camera.position.y += velocityY * elapsed * 0.1;
 
+      this.camera.position = this.camera.position;
+
       this.camera.draw(...this.objects);
     });
   }
@@ -100,6 +102,8 @@ export default class Main {
       this.camera.tilt.v += deltaY;
       this.camera.tilt.v = Math.min(this.camera.tilt.v, Math.PI / 2);
       this.camera.tilt.v = Math.max(this.camera.tilt.v, -Math.PI / 2);
+
+      this.camera.tilt = this.camera.tilt;
     });
 
     document.addEventListener("keydown", (e) => {

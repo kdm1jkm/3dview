@@ -4,14 +4,58 @@ import * as math from "mathjs";
 import Polygon from "./polygon";
 
 export default class Camera {
+  public get screen(): { width: number; height: number } {
+    return this._screen;
+  }
+  public set screen(value: { width: number; height: number }) {
+    this._screen = value;
+    this.screenMat = math.matrix([
+      [value.width / this.k, 0, value.width / 2, 0],
+      [0, -value.width / this.k, value.height / 2, 0],
+      [0, 0, 1, 0],
+      [0, 0, 0, 1],
+    ]);
+  }
+  public get FOV(): number {
+    return this._FOV;
+  }
+  public set FOV(value: number) {
+    this._FOV = value;
+    this.k = 2 * Math.tan(value / 2);
+    this.screenMat = math.matrix([
+      [this.screen.width / value, 0, this.screen.width / 2, 0],
+      [0, -this.screen.width / value, this.screen.height / 2, 0],
+      [0, 0, 1, 0],
+      [0, 0, 0, 1],
+    ]);
+  }
+  public get position(): Pos3 {
+    return this._position;
+  }
+  public set position(value: Pos3) {
+    this._position = value;
+    this.transform = math.matrix([
+      [1, 0, 0, -value.x],
+      [0, 1, 0, -value.y],
+      [0, 0, 1, -value.z],
+      [0, 0, 0, 1],
+    ]);
+  }
+  public get tilt(): { v: number; h: number } {
+    return this._tilt;
+  }
+  public set tilt(value: { v: number; h: number }) {
+    this._tilt = value;
+    this.rotate = Camera.getRotateMatrix({ v: -value.v, h: -value.h });
+  }
   // tilt h -> Degree of Horizontal Tiltrated
   //      v -> Degree of Vertical Tiltrated
   constructor(
     public context: CanvasRenderingContext2D,
-    public screen: { width: number; height: number },
-    public position: Pos3 = { x: 0, y: 0, z: 0 },
-    public tilt: { v: number; h: number } = { v: 0, h: 0 },
-    public FOV: number = Math.PI / 2
+    private _screen: { width: number; height: number },
+    private _position: Pos3 = { x: 0, y: 0, z: 0 },
+    private _tilt: { v: number; h: number } = { v: 0, h: 0 },
+    private _FOV: number = Math.PI / 2
   ) {}
 
   public static getRotateMatrix(tilt: { v: number; h: number }) {
@@ -33,30 +77,35 @@ export default class Camera {
     ]);
   }
 
-  public get rotate() {
-    return Camera.getRotateMatrix({ v: -this.tilt.v, h: -this.tilt.h });
-  }
+  private rotate: math.Matrix = Camera.getRotateMatrix({
+    v: -this.tilt.v,
+    h: -this.tilt.h,
+  });
+
+  private transform = math.matrix([
+    [1, 0, 0, -this.position.x],
+    [0, 1, 0, -this.position.y],
+    [0, 0, 1, -this.position.z],
+    [0, 0, 0, 1],
+  ]);
+
+  private k = 2 * Math.tan(this.FOV / 2);
+  private screenMat = math.matrix([
+    [this.screen.width / this.k, 0, this.screen.width / 2, 0],
+    [0, -this.screen.width / this.k, this.screen.height / 2, 0],
+    [0, 0, 1, 0],
+    [0, 0, 0, 1],
+  ]);
 
   public draw(...objects: Object3D[]) {
     this.context.fillStyle = "white";
     this.context.fillRect(0, 0, this.screen.width, this.screen.height);
-    const k = 2 * Math.tan(this.FOV / 2);
 
-    const transform = math.matrix([
-      [1, 0, 0, -this.position.x],
-      [0, 1, 0, -this.position.y],
-      [0, 0, 1, -this.position.z],
-      [0, 0, 0, 1],
-    ]);
+    const transform = this.transform;
     const rotate = this.rotate;
-    const screen = math.matrix([
-      [this.screen.width / k, 0, this.screen.width / 2, 0],
-      [0, -this.screen.width / k, this.screen.height / 2, 0],
-      [0, 0, 1, 0],
-      [0, 0, 0, 1],
-    ]);
+    const screenMat = this.screenMat;
 
-    const mat = math.multiply(screen, math.multiply(rotate, transform));
+    const mat = math.multiply(screenMat, math.multiply(rotate, transform));
 
     const projectedPolygons = objects
       .map((object) => {
