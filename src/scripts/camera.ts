@@ -97,6 +97,8 @@ export default class Camera {
     [0, 0, 0, 1],
   ]);
 
+  private reverse = -1;
+
   public draw(...objects: Object3D[]) {
     this.context.fillStyle = "white";
     this.context.fillRect(0, 0, this.screen.width, this.screen.height);
@@ -136,15 +138,22 @@ export default class Camera {
         });
     });
 
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "r") {
+        this.reverse *= -1;
+      }
+    });
+
     projectedPolygons
       .sort((p1, p2) => {
-        return -(
-          p1.points[0].z +
-          p1.points[1].z +
-          p1.points[2].z -
-          p2.points[0].z -
-          p2.points[1].z -
-          p2.points[1].z
+        return (
+          this.reverse *
+          (p1.points[0].z +
+            p1.points[1].z +
+            p1.points[2].z -
+            p2.points[0].z -
+            p2.points[1].z -
+            p2.points[1].z)
         );
       })
       .map((p) => {
