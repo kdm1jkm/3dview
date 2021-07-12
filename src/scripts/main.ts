@@ -103,7 +103,7 @@ export default class Main {
       if (this.pressingKey.has("a")) velocityX -= 1;
       if (this.pressingKey.has("d")) velocityX += 1;
       if (this.pressingKey.has(" ")) velocityY += 1;
-      if (this.pressingKey.has("Shift")) velocityY -= 1;
+      if (this.pressingKey.has("shift")) velocityY -= 1;
 
       const rotated = math
         .multiply(
@@ -134,7 +134,7 @@ export default class Main {
 
     this.canvas.addEventListener("mousemove", (e) => {
       if (document.pointerLockElement !== this.canvas) return;
-      if (this.pressingKey.has("Escape")) return;
+      if (this.pressingKey.has("escape")) return;
       const deltaX = (e.movementX / 200) * -1;
       const deltaY = e.movementY / 200;
 
@@ -149,12 +149,12 @@ export default class Main {
     });
 
     document.addEventListener("keydown", (e) => {
-      this.pressingKey.add(e.key);
+      this.pressingKey.add(e.key.toLowerCase());
       if (e.key === "r") this.camera.reverse *= -1;
     });
 
     document.addEventListener("keyup", (e) => {
-      this.pressingKey.delete(e.key);
+      this.pressingKey.delete(e.key.toLowerCase());
     });
   }
 
