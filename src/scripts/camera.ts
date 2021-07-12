@@ -97,7 +97,7 @@ export default class Camera {
     [0, 0, 0, 1],
   ]);
 
-  private reverse = -1;
+  public reverse: 1 | -1 = -1;
 
   public draw(...objects: Object3D[]) {
     this.context.fillStyle = "white";
@@ -136,12 +136,6 @@ export default class Camera {
         .map((p) => {
           return { points: p, color: object.color };
         });
-    });
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "r") {
-        this.reverse *= -1;
-      }
     });
 
     projectedPolygons

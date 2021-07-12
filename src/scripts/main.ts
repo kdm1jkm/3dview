@@ -150,6 +150,7 @@ export default class Main {
 
     document.addEventListener("keydown", (e) => {
       this.pressingKey.add(e.key);
+      if (e.key === "r") this.camera.reverse *= -1;
     });
 
     document.addEventListener("keyup", (e) => {
